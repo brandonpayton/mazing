@@ -1,5 +1,5 @@
 [package]
-name = "maze"
+name = "mazing"
 version = "0.1.0"
 edition = "2018"
 
@@ -7,4 +7,3 @@ edition = "2018"
 
 [dependencies]
 macroquad = "0.4.14"
-rand = "0.8.4"
