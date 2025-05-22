@@ -290,18 +290,28 @@ async fn main() {
                     let d1 = (exit_x - x1) + (exit_y - y1);
                     let d2 = (exit_x - x2) + (exit_y - y2);
 
-                    return d1.cmp(&d2);
+                    match d1.cmp(&d2) {
+                        Ordering::Less => Ordering::Less,
+                        Ordering::Greater => Ordering::Greater,
+                        // If equal, pick randomly so original direction order doesn't bias
+                        // the selection when the directions are of equal distance.
+                        Ordering::Equal => if rand::rand() % 2 == 0 {
+                            Ordering::Less
+                        } else {
+                            Ordering::Greater
+                        },
+                    }
                 };
                 possible_directions.sort_by(prefer_nearest_to_exit);
-                let next_cell = possible_directions[0];
+                let next_cell = possible_directions[rand::rand() as usize % num_possibilities];
                 cell_stack.push_back(next_cell);
                 visited_cells.insert(next_cell);
             } else {
                 // TODO: Be careful about unwrap
                 backtracked_cells.insert(cell_stack.pop_back().unwrap());
             }
-
-            next_frame().await;
         }
+
+        next_frame().await;
     }
 }
