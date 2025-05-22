@@ -123,7 +123,7 @@ async fn main() {
         //     ..Default::default()
         // });
 
-        clear_background(WHITE);
+        clear_background(LIGHTGRAY);
 
         let window_width = screen_width();
         let window_height = screen_height();
@@ -183,19 +183,21 @@ async fn main() {
                     },
                 ];
                 let triangle_color = if row == 0 && col == 0 {
-                    RED
+                    Some(RED)
                 } else if row == exit_row && col == exit_col {
-                    GREEN
+                    Some(GREEN)
                 } else if backtracked_cells.contains(&(row, col)) {
-                    ORANGE
+                    Some(ORANGE)
                 } else if visited_cells.contains(&(row, col)) {
-                    BLUE
+                    Some(BLUE)
                 } else {
-                    WHITE
+                    None
                 };
 
                 //polygon( triangle_color, &vertices, c.transform, g );
-                draw_triangle(vertices[0], vertices[1], vertices[2], triangle_color);
+                if let Some(color) = triangle_color {
+                    draw_triangle(vertices[0], vertices[1], vertices[2], color);
+                }
 
                 let wall_index: usize = get_wall_index(row, col);
                 let color = BLACK;
